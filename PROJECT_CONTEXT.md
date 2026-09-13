@@ -1,13 +1,21 @@
 # 项目上下文
 
-最后更新：2026-09-08 23:20:00
-记忆版本：17
+最后更新：2026-09-13 22:07:00
+记忆版本：18
 
 ## QUICK_INDEX
 > 本区是每次任务开始优先读取的快速索引。
 
 ### 当前入口
 - scripts/main.lua
+
+### 代码托管
+- 远程仓库：https://github.com/Ashmilyer/taptapmojianghu2.git（分支 main）
+- 提交者：Ashmilyer <Ashmilyer@users.noreply.github.com>
+- 最近推送：9f74f12 上传默江湖游戏代码与资源（81 个文件，41755 行）
+- 上传范围：scripts/、assets/、.project/、项目记忆文件、.gitignore
+- 不上传：dist/、.build/、.cli/、.emmylua/、logs/、.tmp/、save.json、screenshots/、game_material/、引擎知识目录
+- 认证方式：HTTPS + fine-grained PAT，需 Contents: Read and write；Token 不写入 .git/config
 
 ### 当前架构
 - 项目类型：单机 2D 俯视角空间挂机战斗原型

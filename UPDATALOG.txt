@@ -1,3 +1,23 @@
+[2026-09-13 22:07] V4.2.1
+类型：代码上传 GitHub
+关联决策：用户要求把游戏代码上传到 https://github.com/Ashmilyer/taptapmojianghu2
+修改文件：
+- .gitignore：新增忽略 save.json、screenshots/、game_material/
+新增文件：
+- .git/：初始化 Git 仓库并创建首次提交 9f74f12（81 个文件，41755 行插入）
+推送结果：
+- 远程 main 已指向 9f74f12a677f64b016e6036b178d9bad234d9ec5，远程 blob 数 81，与本地提交一致
+上传清单：
+- scripts/main.lua、scripts/Data/、scripts/Systems/、scripts/UI/ 全部脚本及其 .meta
+- scripts/.luarc.json
+- assets/Fonts/NotoSansSC-Black.ttf、assets/image/ 全部素材及其 .meta
+- .project/ 配置（project.json、settings.json、i18n.json、resources.json 及 .meta）
+- PROJECT_CONTEXT.md、DECISIONS_LOG.md、UPDATALOG.txt、.gitignore
+未上传：
+- 构建产物与引擎副本：dist/、.build/、.cli/、.emmylua/、engine-docs/、examples/、templates/、urhox-libs/、schemas/、tools/、skills/
+- 运行期与本地内容：logs/、.tmp/、save.json、screenshots/、game_material/、_uploads/、.agents/、.opencode/
+备注：提交者 Ashmilyer <Ashmilyer@users.noreply.github.com>；远程 origin = https://github.com/Ashmilyer/taptapmojianghu2.git；推送要求 fine-grained PAT 具备 Contents: Read and write，Token 不落盘到 .git/config。
+
 [2026-09-08 23:20] V4.2.0
 类型：第三阶段成长与掉落系统
 关联决策：用户确认先按推荐方案实现升级成长、地图推荐等级、传奇掉落与装备经济
