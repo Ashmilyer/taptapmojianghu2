@@ -1,0 +1,34 @@
+{
+  "$schema": "../schemas/project.schema.json",
+  "project_id": "m_kqb3",
+  "author": {
+    "id": "1854209424"
+  },
+  "entry": "main.lua",
+  "version": "1.0.1",
+  "taptap_publish": {
+    "title": "剑·侠·道",
+    "description": "雨夜废驿中的战棋冒险原型，探索地形高低差，选择单位并制定移动策略。",
+    "category": "strategy",
+    "screen_orientation": "landscape",
+    "collection_type": "sce",
+    "trial_note": "<developer's note>",
+    "app_platforms": "1,2",
+    "developer_id": 419189,
+    "app_id": 911447,
+    "miniapp_id": "tapmctt4vdtfawjbdy"
+  },
+  "assets": {
+    "icon": "./game_material/ICON_2026-08-19T09-53-59_01.png",
+    "screenshots": [],
+    "promotional_image": "",
+    "icon_url": "https://tapcode-sce.spark.xd.com/assets/game_material/默江湖：雨夜废驿/ICON_2026-08-19T09-53-59_01.png"
+  },
+  "metadata": {
+    "updated_at": "2026-08-19T09:55:19.758Z"
+  },
+  "test_qrcode": {
+    "url": "https://tapcode-sce.spark.xd.com/qrcode/m_kqb3_1787133289882.png",
+    "generated_at": "2026-08-19T09:54:50.031Z"
+  }
+}

@@ -1,0 +1,365 @@
+[2026-09-08 23:20] V4.2.0
+类型：第三阶段成长与掉落系统
+关联决策：用户确认先按推荐方案实现升级成长、地图推荐等级、传奇掉落与装备经济
+修改文件：
+- scripts/Data/ProgressionData.lua：接入用户提供的 1—100 级总经验表；新增等级、进度和升级属性奖励计算
+- scripts/Data/GameData.lua：增加角色等级成长加成字段
+- scripts/Data/MapData.lua：三张地图独立解锁、推荐等级、地图经验配置；修正青石峡/云顶古战场普通敌人经验
+- scripts/Systems/AttributeSystem.lua：接入等级根骨、灵巧、元气以及生命/内力/真气上限成长
+- scripts/Systems/LootSystem.lua：首领额外 10% 传奇掉落；出售/分解价值；传奇装备经济保护
+- scripts/Systems/Inventory.lua：背包一键整理和分解材料存档字段
+- scripts/main.lua：升级恢复资源、经验 HUD、推荐等级、传奇掉落、穿戴/出售/分解/整理交互和存档恢复
+- scripts/UI/BattleUI.lua：经验条、推荐等级、装备比较文本、穿戴/出售/分解/整理按钮和材料显示；保留 11 个装备格与 40 个背包格
+验证：
+- BattleUI.lua LSP Error 0
+- 官方 UrhoX 构建成功
+- 运行时验证 200 帧：lua_errors=0、resource_errors=0、missing_resources=0；截图生成于 screenshots/third-stage.png
+- 过滤已知 shader/audio/帧耗时环境噪音后无真实错误
+- 隐藏浮层 ScrollView Zero height warning 仍存在，确认由隐藏浮层父级初始尺寸传播引起；未保留无效最小高度改动
+备注：传奇装备不可出售、不可分解；普通与首领掉落继续进入 40 格背包；地图仍沿用当前战斗背景素材。
+
+[2026-09-08 22:15] V4.1.0
+类型：第二阶段战斗深度
+关联决策：用户确认按推荐方案实现五类敌人、首领阶段和战斗反馈
+修改文件：
+- scripts/Data/MapData.lua：三张地图增加近战、远程、重甲、毒伤、召唤祭司敌人类型配置；首领阶段阈值 70%/40%
+- scripts/Systems/BattleSim.lua：新增敌人角色行为、远程保持距离、召唤祭司 8 秒召唤援军、毒伤 5 秒持续效果、首领阶段切换、阶段援军、范围重击 1.2 秒预警、浮动战斗反馈数据
+- scripts/UI/BattleUI.lua：新增战场伤害数字、暴击/毒伤颜色、首领范围预警圈渲染
+- scripts/main.lua：接入反馈和预警 HUD 更新、普通/首领经验等级刷新
+验证：
+- BattleSim.lua、BattleUI.lua、main.lua、MapData.lua LSP Error 0
+- 官方 UrhoX 构建成功
+- 运行时验证 180 帧：lua_errors=0、resource_errors=0、missing_resources=0；6 个 engine_errors 均为已知 shader/audio 环境噪音
+备注：首领奖励未重复累加；范围预警为玩家当前位置的 1.2 秒红圈提示；地图仍沿用现有背景素材。
+
+
+类型：第一阶段核心可玩闭环
+关联决策：用户确认主菜单/暂停、100级经验表、多地图独立解锁、首领自动结算
+修改文件：
+- scripts/Data/ProgressionData.lua：新增 1-100 级总经验表、等级计算、升级进度查询
+- scripts/Data/MapData.lua：新增荒山古径/青石峡/云顶古战场三张地图、首领解锁条件和地图经验奖励
+- scripts/Systems/BattleSim.lua：新增首领结算回调；首领奖励在普通掉落回调后发放
+- scripts/Systems/Inventory.lua：存档新增 playerLevel、defeatedBosses
+- scripts/UI/BattleUI.lua：新增暂停层、主菜单层和地图锁定展示所需 UI
+- scripts/main.lua：接入经验等级、首领结算、暂停/返回主菜单、地图解锁、经验和首领次数 HUD、存档恢复
+- PROJECT_CONTEXT.md：同步第一阶段闭环状态
+验证：
+- 相关 Lua 文件 LSP Error 0
+- 官方 UrhoX 构建成功
+备注：当前仍为自动战斗核心闭环；地图暂沿用现有战斗背景，后续可替换为独立地图素材。
+
+
+类型：背包与装备逐件格子绘制
+关联决策：用户明确要求每个装备/物品都有独立格子与图标
+修改文件：
+- scripts/UI/BattleUI.lua：新增 11 槽装备格、40 槽背包格、装备/物品图标 glyph、品质边框、名称、等级与空格绘制；装备格围绕角色立绘定位
+- scripts/main.lua：RefreshEquipmentPanel 改为固定生成所有装备格与全部 40 个背包格，点击行为保持穿戴/卸下/详情逻辑
+- PROJECT_CONTEXT.md：同步逐件绘制 UI 约束
+验证：
+- scripts/UI/BattleUI.lua LSP Error 0
+- scripts/main.lua LSP Error 0
+- 官方 UrhoX 构建成功
+备注：未新增外部素材 URL；图标采用 UI 内绘制的分类 glyph，后续如提供装备图标素材可按槽位替换。
+
+
+类型：全量 UI 视觉重做（背包/装备、招式、专属精研、换图、战场 HUD）
+关联决策：沿用 Yoga UI 与现有动态交互 ID；无玩法规则变更
+修改文件：
+- scripts/UI/BattleUI.lua：按参考图重做暖色古典金棕视觉；新增完整面板/标题栏/页签/卡片/装备角色区/物品格/品质色/招式装配摘要/四槽精研/地图选择；保留原有动态 ID、回调和数据刷新接口
+- PROJECT_CONTEXT.md：同步 UI 视觉与活跃文件定位
+验证：
+- scripts/UI/BattleUI.lua LSP Error 0
+- scripts/main.lua LSP Error 0
+- 官方 UrhoX 构建成功
+备注：未写入 dist/；未新增外部素材 URL；沿用 workspace 内现有角色立绘与战斗素材。
+
+
+类型：召唤类技能接入（召唤物自动作战）+ 召唤词缀生效 + 48 条专属精研关联
+关联决策：D-20260908-008
+新增文件：
+- scripts/Data/SkillSummonData.lua：12 个本地召唤/智械/模组化/贯注模板（元素之灵等在 TLIDB 无独立页）+ 14 种召唤单位 archetype + LibrarySummonMap（8 库内技法）
+- scripts/Data/AffixSummonPool.lua：召唤词缀补充池（36 类 77 条干净单段：伤害%/攻速%/数量上限）
+修改文件：
+- scripts/Systems/BattleSim.lua：召唤系统（summons 独立单位、TrySummon/SpawnSummon/SummonUpdate/NearestHostile/死亡自动重召、Update 主循环接入）；ReleaseTechnique 前置 IsSummonSkill 走召唤 + buff 精研乘区
+- scripts/Systems/AffixParser.lua：percentSummonDamage/AttackSpeed/MoveSpeed + flatSummonCount（置于玩家攻速/泛伤害解析之前）；M.Clean 行误删已修复
+- scripts/Systems/ItemFactory.lua：NewBonuses/ApplyModifier 召唤四通道；RollAffixes 池合并（FullPool + SummonPool）
+- scripts/Systems/EquipmentSystem.lua / AttributeSystem.lua：bonuses.summonXxxPct/summonCountBonus 聚合与 attributes 输出
+- scripts/Systems/TechniqueEffects.lua：贯注 5 buff 映射
+- scripts/Data/SkillRefineData.lua：48 条未绑定专属精研绑定本地模板 id（0 未绑定）
+- scripts/UI/BattleUI.lua：精研装配浮层四列（外攻/内攻/精研一/精研二）
+- scripts/main.lua：SkillSummonData 并入通用精研总览；GetSkillById fallback；精研槽扩展 3/4（SyncRefineBonus/EquipRefineSlot/RefreshRefinePanel/存档 refineT1Id/refineT2Id）；战场渲染召唤物
+验证：
+- LSP Error 0（临时生成脚本已删除）
+- 官方 UrhoX 构建成功
+- headless 自检 PASS：模板 12/archetype≥14/映射 8/精研未绑定 0/召唤伤害%与攻速%与数量上限解析/属性通道/召唤 1→上限 2（词缀+1）/敌人可攻击召唤物掉血
+- validate 150 帧：Lua错误0、资源错误0、缺失资源0（engine 噪音过滤后无真实错误）
+备注：元素之灵系（召唤火焰之灵等）与智械/模组化无 TLIDB 本体页 → 本地模板（数值自设、非直译）；贯注 5 条为附魔型 buff；召唤物数值平衡后续随图调整；词缀池仅干净单段 77 条（大量合并文本词条未纳入）。
+
+[2026-09-08 18:00] V3.5.0
+类型：全量传奇装备接入（图鉴 + 可穿戴试用，不开放掉落）
+关联决策：D-20260908-007
+新增文件：
+- scripts/Data/LegendGearData.lua：314 件 TLIDB 传奇 ×（基础 + 腐蚀版）= 627 条目（采集 314 详情页；武侠化命名 + sourceName 原译；catalogId 底材绑定 + category/slot；quote 铭文；affixTexts 固定词缀）
+修改文件：
+- scripts/Systems/ItemFactory.lua：新增 CreateLegend(catalogItem, affixTexts)——可解析词缀 RollOnce 掷值真实生效，特殊句进 item.legendTexts 展示
+- scripts/UI/BattleUI.lua：装备浮层第四页签「传奇图鉴」（legendBody：部位分类 legendCatList / 条目列表 legendItemList / 详情 legendDetailText + 试用入库按钮 legendTryButton）；ShowEquipmentPage/selectTab 加 legend
+- scripts/main.lua：LegendGearData require；RefreshLegendPanel（部位过滤、默认预览 260 行）；TryLegendItem（试用入库按当前详情生成物品 + 生效/特殊句统计）；SwitchEquipmentPage legend 分支；onLegendTry callback
+验证：
+- LSP Error 诊断 0
+- 官方 UrhoX 构建成功
+- headless 自检 PASS：627 条目 / 314+313 版本分布 / 底材 0 缺失 / ById 索引 / CreateLegend 生成 / 全量 627 条逐条构造 0 失败（词缀生效 1485 条、特殊句 1604 条）
+- validate 120 帧：Lua错误0、资源错误0、缺失资源0（engine 噪音过滤后无真实错误）
+备注：武侠化保守规则实际改名 9/314（玄铁誓约/大宗师之手/机巧领主/太虚堤岸等），其余原译名武侠感已足；8 条无底材信息用分类归属就近底材；特殊句（机制/负面长句）仅展示，后续逐条精修；掉落未开放。
+
+[2026-09-08 17:40] V3.4.0
+类型：华贵/崇高辅助技能接入为「招式的专属精研」；通用技法改名为「通用精研」
+关联决策：D-20260908-006
+新增文件：
+- scripts/Data/SkillRefineData.lua：华贵(139)/崇高(154) 专属精研 293 条（TLIDB 列表+详情采集；武侠化名 = 目标武侠名·变体词；refineTargetId 绑定 245 条 / 未绑定 48 条；bonus=20 基底；details 全文）
+修改文件：
+- scripts/Data/SkillData.lua：85 条 kind「通用技法」→「通用精研」（GeneralSkills 构建同步）
+- scripts/main.lua：通用精研全部文案/kind 判断改名；专属精研槽 refineEquip_[1/2]；SyncRefineBonus 同步技能副本 refineBonusPct；EquipRefineSlot/OpenRefinePanel/RefreshRefinePanel/CloseRefinePanel；换招式自动卸下旧精研；存档 refineOuterId/refineInnerId
+- scripts/UI/BattleUI.lua：技能栏加「精研」按钮；招式总览页签/提示文案改名（通用技法→通用精研、技法→精研）；新增 _buildRefineOverlay 装配浮层（左外攻列/右内攻列）
+- scripts/Systems/DamageSystem.lua：CalculatePlayerDamage 增加 skill.refineBonusPct 独立乘区
+- scripts/Systems/BattleSim.lua / TechniqueEffects.lua：日志与注释文案改名
+验证：
+- LSP Error 诊断 0（11 文件）
+- 官方 UrhoX 构建成功
+- headless 自检 PASS：293 条数据完整、绑定 245/未绑定 48、Focused_Shot 5 条、武侠名「凝神贯一箭·奋起」、+20% 乘区伤害精确 ×1.2、绑定目标全部有效、未绑定条目不参与装配
+- validate 150 帧：Lua错误0、资源错误0、缺失资源0（engine 噪音过滤后无真实错误）
+备注：华贵/崇高基底均为「被辅助技能额外+20%伤害」→ bonus=20；变体机制句（重写攻击模式/战意/投射物类）完整保留在 details，逐条精修数值后续以 RefineEffects 表扩展；48 条未绑定（召唤之灵/智械/贯注 base 未接入）仅浏览不入装配。
+
+[2026-09-08 16:30] V3.3.0
+类型：辅助技能→通用技法（主动增益槽 ×2）+ 光环类→辅助功法（常驻被动槽 ×2）
+关联决策：D-20260908-005
+新增文件：
+- scripts/Data/SkillAuraData.lua：20 条辅助功法数据（TLIDB 光环标签页采集；每级效果值 = 页面 L20÷20 线性换算；stats=通道+每级数值+kind）
+- scripts/Systems/AuraSystem.lua：Aggregate(auras, level) → addon{bonuses/baseAdd/multPct/resAdd/regen/manaSealPctSum}；GetAuraById
+- scripts/Systems/TechniqueEffects.lua：通用技法战斗效果手工映射表（31 条：防护减伤/激发伤害增益/灵药回复/战吼/诅咒易伤；value=文案 L1 首值）；HasEffect
+修改文件：
+- scripts/Data/SkillData.lua：85 条辅助技能 kind「辅助技能」→「通用技法」；SupportSkills → GeneralSkills
+- scripts/Systems/BattleSim.lua：技法槽 mechanic（techniqueSlots 独立冷却、ReleaseTechnique buff/recover、buff 到期还原、减伤入口 ApplyPlayerDamage 上限85%、敌方攻击统一走 ApplyPlayerDamage、damageReducePct/critDamagePct 百分数字段与小数通道区分 TECH_PCT_FIELDS）；Update 主循环挂 TechniqueUpdate
+- scripts/Systems/AttributeSystem.lua：Build(character, loadout, auraAddon) 三参；功法 bonuses 并入装备通道、baseAdd/multPct/resAdd/regen、魔力封印扣内力上限
+- scripts/UI/BattleUI.lua：技能栏双行（功法一/二 + 技法一/二 槽按钮 / 外攻内攻+暂停招式装备换图）；招式总览浮层四页签（外攻/内攻/通用技法/辅助功法）+ 四提示行
+- scripts/main.lua：auraSlots_×2 / techniqueSlots_×2；EquipAura/EquipTechnique/OpenSkillLibrary(kind, slotHint)；RefreshAttributes 并入功法；RebuildSimTechniqueSlots；存档新四字段；FormatSkillLine 技法描述行 + TruncateUtf8 安全截断；未映射技法行「未接入原型」标灰红
+移除/废弃：无
+验证：
+- LSP Error 诊断 0
+- 官方 UrhoX 构建成功
+- headless 自检（_proc/test_aux.lua 已删除）：功法近战/暴击值/生命回复加成生效；双50%功法内力封印归零；技法12%减伤扣血精确 -88%；buff 到期还原；灵药回复 30%→71%；未映射静默跳过；功法 20 条/技法映射 31 条
+- validate 150 帧：Lua错误0、资源错误0、缺失资源0（engine 噪音过滤后无真实错误）
+- 截图（1080×1920）无 Lua/脚本错误
+备注：技法剩余 54 条（位移/哨卫/召唤/智械/护盾/格挡）原型不支持，UI 标「未接入原型」可浏览装备但不参战；功法 L1 生效、等级系统后续再设计；ScrollView zero-height warning 为隐藏浮层既有提示非本轮引入。
+
+[2026-09-07 15:43] V2.1.0
+类型：装备系统与 TLIDB 武器数据接入
+关联决策：D-20260907-002
+修改文件：
+- scripts/Data/EquipmentData.lua：新增10个装备位置、外攻/内攻武器映射、TLIDB原始基础词缀区间和防具底材
+- scripts/Data/GameData.lua：新增默认装备栏和阳性/阴性/混元伤害字段
+- scripts/Systems/EquipmentSystem.lua：新增装备区间保留与属性聚合
+- scripts/Systems/AttributeSystem.lua：接入装备生命、内力、真气、护甲、抗性、速度、点伤和伤害加成
+- scripts/Systems/DamageSystem.lua：按基础点伤+附加点伤和普通/额外伤害乘区计算总伤害
+- scripts/UI/BattleUI.lua：新增装备位置摘要和外攻/内攻武器显示
+- scripts/main.lua：接入装备栏、武器点伤和新伤害术语
+- PROJECT_CONTEXT.md：同步装备系统定位
+- DECISIONS_LOG.md：记录 TLIDB 数据映射和伤害规则
+验证：
+- LSP Error 诊断通过
+- 官方 UrhoX 构建成功
+- 运行验证：Lua错误0、资源错误0、缺失资源0；剩余为预编译 shader 环境噪音
+- 截图验证：/workspace/screenshots/装备系统原型.png
+备注：原始复合区间保留为低端/高端独立区间；当前原型战斗使用区间中值，后续掉落实例可替换为随机掷值。
+
+类型：文件清理与新挂机战斗原型
+关联决策：D-20260907-001
+修改文件：
+- scripts/main.lua：重建为自动寻怪、自动外攻/内攻、敌人反击、奖励和 HUD 入口
+- scripts/Data/GameData.lua：新增角色、武器、招式、敌人数据
+- scripts/Systems/AttributeSystem.lua：新增根骨/灵巧/元气派生属性和闪避计算
+- scripts/Systems/DamageSystem.lua：新增外攻、内攻、抗性和伤害计算
+- scripts/Systems/IdleSystem.lua：新增15秒寻怪和移动/位移减免
+- scripts/UI/BattleUI.lua：新增 Yoga UI 战斗 HUD
+- PROJECT_CONTEXT.md：切换到新项目架构索引
+- DECISIONS_LOG.md：记录新项目长期数据规则
+新增资源：
+- assets/image/挂机战斗场景_20260907042337.png：国风战斗背景
+- assets/image/侠客角色_20260907042339.png：侠客角色立绘
+- assets/image/山魈敌人_20260907042339.png：山魈敌人立绘
+- assets/Fonts/NotoSansSC-Black.ttf：中文字体
+移除/废弃：
+- 旧 scripts/Narrative、scripts/UIEditor.lua、旧 main.lua
+- 旧水墨场景、旧角色、旧战棋格、旧视频和旧序列帧资源
+当前活跃脚本清单：
+- scripts/main.lua
+- scripts/Data/GameData.lua
+- scripts/Systems/AttributeSystem.lua
+- scripts/Systems/DamageSystem.lua
+- scripts/Systems/IdleSystem.lua
+- scripts/UI/BattleUI.lua
+验证：
+- LSP Error 诊断通过
+- 官方 UrhoX 构建成功
+- 运行时验证：Lua错误0、缺失资源0
+- 截图验证：/workspace/screenshots/挂机战斗原型.png
+备注：验证报告中的预编译 shader 错误属于运行环境噪音；已无脚本层或资源层错误。
+
+[2026-09-07 17:06] V2.1.1
+类型：装备战斗接入与 HUD 适配
+关联决策：D-20260907-004
+修改文件：
+- scripts/Systems/DamageSystem.lua：支持多个额外伤害乘区逐项独立相乘
+- scripts/Data/GameData.lua：为外攻和内攻招式补充额外伤害乘区数组
+- scripts/Systems/EquipmentSystem.lua：显式聚合外攻/内攻武器暴击值
+- scripts/Systems/AttributeSystem.lua：暴露分离的外攻/内攻武器暴击值字段
+- scripts/main.lua：内攻施法间隔接入内攻武器攻击速度
+- scripts/UI/BattleUI.lua：压缩低分辨率 HUD 布局，恢复战斗立绘可见性并消除溢出
+- PROJECT_CONTEXT.md：同步 11 个装备位置和当前状态
+- DECISIONS_LOG.md：记录本轮装备、伤害乘区、攻速和 UI 决策
+验证：
+- 6 个目标脚本 LSP Error 诊断通过
+- 官方 UrhoX 构建成功
+- 1200 帧运行验证：Lua错误0、资源错误0、缺失资源0；已跨过15秒寻怪并进入外攻战斗，确认造成伤害和敌人反击
+- 800×600 离屏截图验证：角色/敌人立绘、装备底材和三大属性可见，无 Layout Overflow
+备注：预编译 shader 和无声卡提示属于运行环境噪音；TLIDB 的“500 暴击值”仍保留为独立暴击值，未擅自换算为暴击几率。
+
+[2026-09-07 21:36] V2.2.0
+类型：暴击机制接入
+关联决策：D-20260907-005
+修改文件：
+- scripts/Data/GameData.lua：角色增加暴击值%普通加算与额外乘区字段；招式增加 baseCrit（青冥内息 500）
+- scripts/Systems/AttributeSystem.lua：新增 GetBaseCritValue/GetFinalCritValue/GetCritChance；暴击几率 = 最终暴击值/100 返回 0~1
+- scripts/Systems/DamageSystem.lua：CalculatePlayerDamage 支持 isCrit 参数，暴击伤害 = 总伤害 × 150%
+- scripts/main.lua：UseSkill 判定暴击并输出“造成暴击”日志；critLabel 显示外攻/内攻暴击几率与暴伤
+- scripts/UI/BattleUI.lua：新增 critLabel 行，移除冗余标题行防溢出
+- PROJECT_CONTEXT.md：更新 QUICK_INDEX 暴击定位与记忆版本
+- DECISIONS_LOG.md：记录 D-20260907-005 暴击规则
+验证：
+- 6 个目标脚本 LSP Error 诊断通过
+- 官方 UrhoX 构建成功
+- 数学探针：外攻 500→5.0%、内攻 baseCrit 500→5.0%、普通 6.55/暴击 9.82(=×1.5)、10000 次模拟暴击 5.21%
+- 7200 帧运行验证：真实出现 5 次“造成暴击 9.8”日志，Lua错误0、资源错误0、缺失资源0
+- 800×600 截图验证：critLabel 可显示且无 Layout Overflow
+备注：初次实现曾误将暴击几率(5%)当作 1.0 概率导致 100% 暴击，已修正为返回 0~1（500/100=5 → 0.05）；内攻武器琴的 500 暴击值按用户确认本轮不叠加。
+
+[2026-09-07 22:38] V2.3.0
+类型：全量技能库接入 + 招式总览 UI
+关联决策：D-20260907-006
+新增文件：
+- scripts/Data/SkillData.lua：TLIDB 主动技能全量 203 项技能库（攻击→外攻 62 / 法术→内攻 56 / 防护激发召唤诅咒战吼位移等→辅助 85 不参战）；含武侠四字诀命名、sourceName、主属性、元素、消耗/施法/冷却、描述、1-40 级成长表；7025 行数据文件
+修改文件：
+- scripts/Data/GameData.lua：不变（战斗仍默认用流云剑式/青冥内息）
+- scripts/main.lua：require SkillData；新增招式总览打开/关闭/分类刷新逻辑；启动日志打印技能库统计
+- scripts/UI/BattleUI.lua：底部新增「招式总览」按钮；新增全屏浮层（absolute，默认隐藏）含 外攻/内攻/辅助 三个 Tab 与 ScrollView 列表
+- PROJECT_CONTEXT.md：更新技能库定位与记忆版本 4
+- DECISIONS_LOG.md：记录 D-20260907-006
+验证：
+- LSP Error 诊断通过（SkillData 大文件首次校验通过）
+- 官方 UrhoX 构建成功
+- 180 帧 validate：Lua错误0、资源错误0、缺失资源0，日志确认「招式总览已接入全量技能：62 外攻/56 内攻/85 辅助」
+- 2000 帧 validate：寻怪→发现山魈→自动战斗→流云剑式暴击 9.8 正常，Lua错误0
+- 800×600 截图：浮层打开时无 Overflow、无 ScrollView 警告；截图 /workspace/screenshots/skill-library-open.png
+备注：SkillData.lua 为 TLIDB 静态采集数据，勿手工改数值；武侠命名映射源文件在 /workspace/.tmp/wuxia_names.py 便于将来调整；Aember_Rain(灾烬雨)、Undercurrent(暗涌) 两条 TLIDB 源站 hover 描述错乱，描述已置空未虚构。
+
+[2026-09-08 09:40] V2.4.0
+类型：全量装备底材图鉴 + 词缀池建库
+关联决策：D-20260907-007
+新增文件：
+- scripts/Data/EquipmentCatalog.lua：TLIDB 分类页 37 项全量采集，652 个各等级普通底材实例（需求等级按网站实际档位）；含 ByCategory/BySlot/GetBySlot 索引；武侠名=保留+定向改写，sourceName 保留 TLIDB 中文名
+- scripts/Data/AffixData.lua：TLIDB 词缀池全量 4282 条（分类/效果原文/类型/来源/Tier/Level/Weight），原样保留区间不虚构
+修改文件：
+- scripts/main.lua：require EquipmentCatalog 与 AffixData；启动日志打印「装备图鉴已接入全量底材：652 件 / 4282 条词缀」
+- PROJECT_CONTEXT.md：新增装备图鉴/词缀池定位，记忆版本 5
+- DECISIONS_LOG.md：记录 D-20260907-007
+验证：
+- LSP Error 诊断通过（含 927KB 底材文件与 631KB 词缀文件）
+- 官方 UrhoX 构建成功
+- 600 帧 validate：Lua错误0、资源错误0、缺失资源0，日志确认 652 底材/4282 词缀加载
+- 800×600 截图无 Overflow/脚本错误（/workspace/screenshots/catalog-loaded.png）
+备注：生成脚本在 /workspace/.tmp/category_map.py（分类→武侠槽位映射）、rewrite_rules.py（定向武侠改写规则）、gen_catalog2.py（生成器）；TLIDB 同底材多 hover 变体保留实际条目；词缀池暂不参与战斗。
+
+[2026-09-08 11:15] V3.0.0
+类型：战斗底层重构为俯视角空间战斗
+关联决策：D-20260908-001
+新增文件：
+- scripts/Data/MapData.lua：地图数据（单图「荒山古径」：enemy/boss 模板 + difficulty；bossKillTarget=100）
+- scripts/Data/SkillSpaceData.lua：118 参战技能空间字段（shape/range/radius/angle/targetCount，按 TLIDB 描述/标签推断）
+- scripts/Systems/BattleSim.lua：俯视空间战斗状态机（寻怪→波次→首领；索敌/走位/出手；范围/多点命中；复活保留战场进度）
+- assets/image/侠客头像_20260908025115.png、山魈头像_20260908025116.png：圆形单位头像素材
+修改文件：
+- scripts/Data/GameData.lua：movementSpeed 基础 5.0；默认两招增加 space 字段（流云剑式=point_melee、青冥内息=circle）
+- scripts/Systems/IdleSystem.lua：寻怪公式改为以 5.0 m/s 为基准（每+10%移速减1%寻怪）
+- scripts/UI/BattleUI.lua：全面重构为俯视战场（顶部状态条+中部圆形单位槽战场+底部HUD+技能栏+地图/招式浮层）
+- scripts/main.lua：接入 MapData/BattleSim；地图选择、战场 HUD 刷新、单位槽位更新
+- PROJECT_CONTEXT.md / DECISIONS_LOG.md 同步
+验证：
+- LSP Error 全通过
+- 官方 UrhoX 构建成功
+- 4200 帧 validate：Lua错误0、资源错误0、缺失资源0；寻怪15秒→第1波4只→自动近身击杀（61秒杀第1只，累计1/100）
+- 低数值探针验证：击杀6/6→山魈王降临→击败→计数重置循环
+- 800×600 截图：圆形头像单位槽渲染正常，无 Overflow（/workspace/screenshots/battlefield-arena3.png）
+备注：正式图 Boss 为 180×8 血；当前原型玩家装备 Lv1，纯外攻击杀普通怪约需 3 分钟/波，可切换青冥内息范围群伤提速；Boss 数值与后续成长/换装平衡待后续轮次调优。
+
+[2026-09-08 12:20] V3.0.1
+类型：Bug 修复
+修改文件：
+- scripts/main.lua：RefreshMapList 中补 require urhox-libs/UI（此前 UI.Button 为 nil 触发点击「换图」崩溃）；清空列表改为逐首 RemoveChild（避免遍历删除跳项）
+验证：
+- LSP Error 通过、官方 UrhoX 构建成功
+- 自动触发 OpenMapOverlay→RefreshMapList 截图验证：无 Lua 错误、无 attempt to call nil、无 Overflow
+备注：根因 = main.lua 未 require UI 模块，地图列表按钮动态构建时 UI.Button 为 nil。
+
+[2026-09-08 15:00] V3.2.0
+类型：装备图鉴 UI + 词缀完整池启用 + 机制词缀扩展
+关联决策：D-20260908-003 / D-20260908-004
+新增文件：
+- scripts/Data/AffixFullPool.lua：全量可掉落词缀池（自动生成 2061 条可解析词缀，含需求等级 level 字段）
+- scripts/UI/BattleUI.lua 重构装备浮层为三页签（穿戴与背包/底材图鉴/词缀池）+ ShowEquipmentPage
+修改文件：
+- scripts/Systems/AffixParser.lua：新增机制类 modifier（暴击伤害%/移速%/技能范围%/冷却回复%/生命护盾返还%/抗性穿透%/泛伤害/元素抗性/全属性/该装备本地%）；修复穿透词缀被 parseResist 误判；泛伤害仅匹配行尾「伤害」
+- scripts/Systems/EquipmentSystem.lua：Aggregate 聚合全通道 bonuses + pierce 表
+- scripts/Systems/AttributeSystem.lua：Build 输出机制通道（movementSpeed 乘区/cooldownRecovery/returnLifePct/returnQiPct/skillRangePct/元素抗性/pierce），新增 GetCritDamageMultiplier
+- scripts/Systems/DamageSystem.lua：抗性穿透结算、暴击倍率走 GetCritDamageMultiplier
+- scripts/Systems/BattleSim.lua：GetEffectiveSpace（技能范围%）、命中返还回复、冷却回复影响出手间隔
+- scripts/Systems/ItemFactory.lua：应用全部机制 modifier；掉落池改用 AffixFullPool 并按词缀 level≤物品等级过滤
+- scripts/main.lua：装备浮层页签切换；新增 RefreshCatalogPanel（652 底材按分类浏览+详情）与 RefreshAffixPanel（4282 词缀按分类浏览，默认预览 300 行）
+移除/废弃：
+- scripts/Data/AffixDropPool.lua（333 条白名单池，被全量 AffixFullPool 取代）
+验证：
+- LSP Error 诊断 0
+- 官方 UrhoX 构建成功
+- headless 机制测试：暴击伤害/移速/返还/技能范围/冷却回复/穿透/泛伤害/元素抗性/全属性/该装备本地% 全部解析并 roll 进 bonuses
+- AffixData 全量覆盖率：4282 条中 2061 条进全量池（含 level 过滤）；1487 条低等级可掉落
+- validate：Lua错误0、资源错误0、缺失资源0
+- 截图验证：图鉴页渲染正常
+备注：机制词缀全部走普通加算通道（符合 mojianghu 规则），不引入独立乘区；护甲减伤穿透因玩家伤害无护甲目标暂不生效仅展示。
+
+
+[2026-09-08 14:00] V3.1.0
+类型：掉落装备系统 + 背包换装 + 招式换招参战 + 完整进度存档
+关联决策：D-20260908-002
+新增文件：
+- scripts/Data/SkillBattleStats.lua：118 参战技能 L1 战斗数值（自动生成：外攻 damageMultiplier 伤害倍率、内攻 baseInnerAttack 点伤中值或 %倍率）
+- scripts/Data/AffixDropPool.lua：低等级可掉落词缀池（自动生成，按类别 333 条，可被 AffixParser 解析）
+- scripts/Systems/AffixParser.lua：词缀文本 → 结构化 modifier（点伤/速度/暴击/主属性/生命护盾护甲闪避/抗性/%伤害/%速度/%暴击值）；⚠️ Lua pattern 不支持 `|` 分支、plain find("%") 勿写 "%%"
+- scripts/Systems/ItemFactory.lua：底材+词缀 → 运行时装备对象（uid/点伤/攻速/暴击/base/bonuses/affixTexts）
+- scripts/Systems/LootSystem.lua：掉落 roll（普通 20%、首领必掉 2 件；掉落等级区间=难度×20）
+- scripts/Systems/Inventory.lua：背包（容量40）、11 槽换装（EquipFromBag/UnequipSlot/ResolveSlotKey 戒指自动入空位）、存档读写（File+cjson save.json）
+修改文件：
+- scripts/Systems/EquipmentSystem.lua：Aggregate 支持掉落词缀 bonuses（physical/elemental/toxin/melee/ranged/skill/inner/dot 与攻速%/暴击值%），nil 攻速/暴击防御
+- scripts/Systems/AttributeSystem.lua：装备 % 词缀进入普通加算通道（physicalDamage 等）、攻速%乘武器攻速、critValuePct 入 critValuePercentBonus
+- scripts/Systems/DamageSystem.lua：新增 GetSkillMultiplier/GetSkillBaseAttack（回退 SkillBattleStats）；外攻点伤=武器点伤总和；总伤害 × 招式伤害倍率
+- scripts/Systems/BattleSim.lua：Create 支持 skillSlots 双槽引用；onKill 击杀回调（掉落钩子）；ApplyAttributes 换装同步玩家上限；cost nil 防御
+- scripts/UI/BattleUI.lua：技能栏加「装备」按钮；招式总览改为可选取技能列表（分类 Tab 高亮 + 当前外攻/内攻提示）；新增装备与背包浮层骨架（equipSlots/equipBagList/equipDetailText）
+- scripts/main.lua：整合掉落 hook、招式双槽换招（外攻/内攻各1）、装备/背包浮层动态重建、换装后属性重算与 sim 同步、自动存档（60s/换图/退出）、LoadSave 启动恢复
+- PROJECT_CONTEXT.md / DECISIONS_LOG.md / UPDATALOG.txt 同步
+验证：
+- LSP Error 诊断 0（8 文件）
+- 官方 UrhoX 构建成功
+- headless 逻辑测试：词缀 20 样例全解析、掉落池 333 条全可解析、掉落→背包→换装→点伤 6→20 生效、存档写读完整
+- validate：Lua错误0、资源错误0、缺失资源0；存档读取/自动保存日志正常
+- 800×600 截图：装备浮层渲染正常（中央面板色与文字可见）
+备注：武器底材基础攻速/暴击曾被 mod.bands 前置校验吞掉（flatSpeed/flatCrit 无 bands），已把二者移到 bands 检查前；Catalog Lv58+ 个别条目词缀文本含页面 HTML 污染，掉落只取 requiredLevel≤难度×20 条目自动避开。
+
+
+
